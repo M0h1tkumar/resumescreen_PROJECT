@@ -1,8 +1,8 @@
 # Multi-Agent Resume Screening System
 
-This repository contains the completed **Multi-Agent Resume Screening System**, developed as part of the TCS Assessment Framework. The system leverages an AI agent graph (using LangGraph) to deterministically parse, score, and rank candidates based on their resumes and the provided job description.
+This repository contains the completed Multi-Agent Resume Screening System, developed as part of the TCS Assessment Framework. The system leverages an AI agent graph (using LangGraph) to deterministically parse, score, and rank candidates based on their resumes and the provided job description.
 
-## 🚀 Features
+## Features
 
 *   **Robust Text Parsing**: Extracts string text accurately from diverse formats (PDF, DOCX) via `utils/parsers.py`.
 *   **Pydantic Data Models**: Enforces strict `CandidateProfile` schema definitions, isolating relevant career details and eliminating systemic bias.
@@ -14,7 +14,7 @@ This repository contains the completed **Multi-Agent Resume Screening System**, 
 *   **Langfuse Instrumentation**: Embedded callback tracking records LLM token utilization, processing latencies, and total execution costs.
 *   **Streamlit Reviewer Interface**: A modern web dashboard allowing recruiters to drag-and-drop resumes, paste job descriptions, and instantly review structured insights.
 
-## ⚙️ Operational Setup
+## Operational Setup
 
 1.  **Clone the Repository**:
     ```bash
@@ -41,7 +41,7 @@ This repository contains the completed **Multi-Agent Resume Screening System**, 
     streamlit run ui/app.py
     ```
 
-## 📊 Evaluation & Metrics (Phase 4)
+## Evaluation and Metrics (Phase 4)
 
 To validate the system against human reviewer baselines, execute the statistical calculation script:
 
@@ -50,7 +50,7 @@ python evaluation/calculate_metrics.py
 ```
 This script computes the **Pearson Correlation Coefficient ($r$)** to ensure the automated agent matches the decisions of senior technical recruiters ($r \ge 0.75$).
 
-## 🎥 Walkthrough Video
+## Walkthrough Video
 
 *(Please provide the link to your 5-minute technical walkthrough video here)*
 *   [Watch the system demonstration](https://youtube.com)
