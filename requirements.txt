@@ -1,0 +1,10 @@
+PyPDF2
+python-docx
+pydantic
+langgraph
+langchain
+langchain-openai
+langfuse
+streamlit
+numpy
+python-dotenv
