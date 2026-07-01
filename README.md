@@ -56,3 +56,9 @@ The core logic resides in the `agents/` directory. The workflow operates as a st
 *(Please provide the link to your technical walkthrough video here)*
 *   [Watch the system demonstration](https://youtube.com)
 *   **What it covers**: Successful resume processing, triggered anomalies (e.g., severe career gaps), and the corresponding Langfuse execution traces.
+
+## System Architecture
+
+The Multi-Agent Resume Screening System uses multiple AI agents to evaluate resumes against a given job description. The architecture below illustrates the overall workflow of the application.
+
+![System Architecture](docs/architecture.png)
