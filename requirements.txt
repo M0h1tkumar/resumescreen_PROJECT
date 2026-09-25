@@ -1,4 +1,4 @@
-PyPDF2
+PyMuPDF
 python-docx
 pydantic
 langgraph
