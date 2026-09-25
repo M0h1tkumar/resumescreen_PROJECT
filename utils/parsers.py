@@ -2,16 +2,15 @@ import PyPDF2
 import docx
 from typing import Optional
 
+import fitz
+
 def parse_pdf(file_path: str) -> Optional[str]:
     """Extract text from a PDF file."""
     try:
         text = ""
-        with open(file_path, 'rb') as file:
-            reader = PyPDF2.PdfReader(file)
-            for page in reader.pages:
-                extracted = page.extract_text()
-                if extracted:
-                    text += extracted + "\n"
+        with fitz.open(file_path) as doc:
+            for page in doc:
+                text += page.get_text() + "\n"
         return text.strip()
     except Exception as e:
         print(f"Error parsing PDF {file_path}: {e}")

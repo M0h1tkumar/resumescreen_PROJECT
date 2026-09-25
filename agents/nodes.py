@@ -1,12 +1,12 @@
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from agents.state import ScreeningState
 from agents.schemas import CandidateProfile
 import json
 
 def get_llm():
-    # Assumes OPENAI_API_KEY is in env
-    return ChatOpenAI(model="gpt-4o", temperature=0.2)
+    # Assumes GOOGLE_API_KEY is in env
+    return ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.2)
 
 from langchain_core.runnables import RunnableConfig
 

@@ -3,7 +3,7 @@ python-docx
 pydantic
 langgraph
 langchain
-langchain-openai
+langchain-google-genai
 langfuse
 streamlit
 numpy
