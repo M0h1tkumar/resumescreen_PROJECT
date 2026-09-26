@@ -6,7 +6,7 @@ import json
 
 def get_llm():
     # Assumes GOOGLE_API_KEY is in env
-    return ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.2)
+    return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", temperature=0.2)
 
 from langchain_core.runnables import RunnableConfig
 
