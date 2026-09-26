@@ -8,4 +8,3 @@ langfuse
 streamlit
 numpy
 python-dotenv
-langchain-nvidia-ai-endpoints

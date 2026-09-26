@@ -1,12 +1,12 @@
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from agents.state import ScreeningState
 from agents.schemas import CandidateProfile, ScoreOutput, AnomaliesOutput, QuestionsOutput
 import json
 
 def get_llm():
-    # Assumes NVIDIA_API_KEY is in env
-    return ChatNVIDIA(model="meta/llama-3.1-70b-instruct", temperature=0.2)
+    # Assumes GOOGLE_API_KEY is in env
+    return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", temperature=0.2)
 
 from langchain_core.runnables import RunnableConfig
 
