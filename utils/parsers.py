@@ -1,4 +1,4 @@
-import PyPDF2
+
 import docx
 from typing import Optional
 
