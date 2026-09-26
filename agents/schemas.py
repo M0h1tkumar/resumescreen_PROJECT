@@ -23,3 +23,12 @@ class CandidateProfile(BaseModel):
     skills: List[str] = Field(default_factory=list, description="List of technical and soft skills")
     education: List[Education] = Field(default_factory=list, description="Educational background")
     experience: List[Experience] = Field(default_factory=list, description="Professional experience")
+
+class ScoreOutput(BaseModel):
+    score: int = Field(description="Alignment score from 0 to 100")
+
+class AnomaliesOutput(BaseModel):
+    anomalies: List[str] = Field(description="List of flagged anomalies")
+
+class QuestionsOutput(BaseModel):
+    questions: List[str] = Field(description="List of interview questions")

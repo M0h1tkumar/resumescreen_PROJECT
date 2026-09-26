@@ -1,7 +1,7 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from agents.state import ScreeningState
-from agents.schemas import CandidateProfile
+from agents.schemas import CandidateProfile, ScoreOutput, AnomaliesOutput, QuestionsOutput
 import json
 
 def get_llm():
@@ -28,22 +28,18 @@ def parser_node(state: ScreeningState, config: RunnableConfig) -> dict:
 def scoring_node(state: ScreeningState, config: RunnableConfig) -> dict:
     """Matches candidate profile against Job Description and calculates alignment score."""
     llm = get_llm()
+    structured_llm = llm.with_structured_output(ScoreOutput)
+    
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a technical recruiter. Compare the candidate profile to the job description. Output ONLY a JSON object with a single key 'score' containing an integer from 0 to 100 representing the alignment score."),
+        ("system", "You are a technical recruiter. Compare the candidate profile to the job description. Output the alignment score as an integer from 0 to 100."),
         ("human", "Candidate Profile:\n{profile}\n\nJob Description:\n{jd}")
     ])
     
-    chain = prompt | llm
+    chain = prompt | structured_llm
     profile_json = state["candidate_profile"].model_dump_json() if state.get("candidate_profile") else "{}"
-    response = chain.invoke({"profile": profile_json, "jd": state["job_description"]}, config=config)
-    
     try:
-        # Strip markdown json block if present
-        content = response.content.strip()
-        if content.startswith("```json"):
-            content = content[7:-3].strip()
-        score_data = json.loads(content)
-        score = int(score_data.get("score", 0))
+        result = chain.invoke({"profile": profile_json, "jd": state["job_description"]}, config=config)
+        score = result.score
     except Exception as e:
         print(f"Error parsing score: {e}")
         score = 0
@@ -53,22 +49,18 @@ def scoring_node(state: ScreeningState, config: RunnableConfig) -> dict:
 def ranking_node(state: ScreeningState, config: RunnableConfig) -> dict:
     """Calculates employment gaps and anomalies."""
     llm = get_llm()
+    structured_llm = llm.with_structured_output(AnomaliesOutput)
+    
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "Analyze the candidate's experience for any employment gaps, overlapping roles, or anomalies. Output a JSON array of strings, where each string is a flagged anomaly. If none, output []."),
+        ("system", "Analyze the candidate's experience for any employment gaps, overlapping roles, or anomalies. Output a list of flagged anomalies. If none, output an empty list."),
         ("human", "Candidate Profile:\n{profile}")
     ])
     
-    chain = prompt | llm
+    chain = prompt | structured_llm
     profile_json = state["candidate_profile"].model_dump_json() if state.get("candidate_profile") else "{}"
-    response = chain.invoke({"profile": profile_json}, config=config)
-    
     try:
-        content = response.content.strip()
-        if content.startswith("```json"):
-            content = content[7:-3].strip()
-        anomalies = json.loads(content)
-        if not isinstance(anomalies, list):
-            anomalies = []
+        result = chain.invoke({"profile": profile_json}, config=config)
+        anomalies = result.anomalies
     except:
         anomalies = []
         
@@ -77,24 +69,20 @@ def ranking_node(state: ScreeningState, config: RunnableConfig) -> dict:
 def interview_question_node(state: ScreeningState, config: RunnableConfig) -> dict:
     """Generates targeted interview questions based on anomalies and skills."""
     llm = get_llm()
+    structured_llm = llm.with_structured_output(QuestionsOutput)
+    
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "Generate 3-5 specific interview questions based on the candidate's skills and any flagged anomalies. Output ONLY a JSON array of strings."),
+        ("system", "Generate 3-5 specific interview questions based on the candidate's skills and any flagged anomalies."),
         ("human", "Skills: {skills}\nAnomalies: {anomalies}")
     ])
     
     skills = state["candidate_profile"].skills if state.get("candidate_profile") else []
     anomalies = state.get("anomalies", [])
     
-    chain = prompt | llm
-    response = chain.invoke({"skills": skills, "anomalies": anomalies}, config=config)
-    
     try:
-        content = response.content.strip()
-        if content.startswith("```json"):
-            content = content[7:-3].strip()
-        questions = json.loads(content)
-        if not isinstance(questions, list):
-            questions = []
+        chain = prompt | structured_llm
+        result = chain.invoke({"skills": skills, "anomalies": anomalies}, config=config)
+        questions = result.questions
     except:
         questions = []
         
