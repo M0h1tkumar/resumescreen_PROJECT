@@ -6,7 +6,7 @@ import json
 
 def get_llm():
     # Assumes NVIDIA_API_KEY is in env
-    return ChatNVIDIA(model="meta/llama-3.3-70b-instruct", temperature=0.2)
+    return ChatNVIDIA(model="meta/llama-3.1-70b-instruct", temperature=0.2)
 
 from langchain_core.runnables import RunnableConfig
 
